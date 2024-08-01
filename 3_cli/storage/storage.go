@@ -1,11 +1,49 @@
 package storage
 
-import "3_cli/files"
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+)
 
-func SaveToStorage(file []byte) {
-	files.WriteFile(file, "data.json")
+type Db interface {
+	Read() ([]byte, error)
+	Write([]byte)
 }
 
-func ReadFromStorage() {
-	files.ReadFile("data.json")
+type Storage struct {
+	UpdatedAt time.Time
+	db        Db
+}
+
+func NewStorage(db Db) *Storage {
+	file, err := db.Read()
+	if err != nil {
+		return &Storage{
+			UpdatedAt: time.Now(),
+			db:        db,
+		}
+	}
+
+	var storage Storage
+	err = json.Unmarshal(file, &storage)
+	if err != nil {
+		fmt.Println("Не удалось обработать файл базы данных")
+		return &Storage{
+			UpdatedAt: time.Now(),
+			db:        db,
+		}
+	}
+
+	return &Storage{
+		db: db,
+	}
+}
+
+func (storage *Storage) SaveToStorage(file []byte) {
+	storage.db.Write(file)
+}
+
+func (storage *Storage) ReadFromStorage() {
+	storage.db.Read()
 }
