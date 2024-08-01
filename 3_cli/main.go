@@ -3,6 +3,7 @@ package main
 import (
 	"3_cli/bins"
 	"3_cli/files"
+	"3_cli/storage"
 	"fmt"
 	"math/rand/v2"
 )
@@ -16,6 +17,7 @@ func promtData(promt string) string {
 }
 
 func main() {
+	storage := storage.NewStorage(files.NewJsonDb("data.json"))
 	binName := promtData("Введите название файла")
 	myBin, err := bins.NewBin(rand.Int32(), binName, true)
 	if err != nil {
@@ -26,5 +28,5 @@ func main() {
 		fmt.Println("Не удалось преобразовать в JSON")
 	}
 
-	files.WriteFile(doc, "data.json")
+	storage.SaveToStorage(doc)
 }
