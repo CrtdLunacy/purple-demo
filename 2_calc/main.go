@@ -93,16 +93,16 @@ func getOperationDataList() []float64 {
 }
 
 func getResultBySelectedOperation(operation string, operationData []float64) float64 {
-	switch {
-	case operation == "AVG":
-		return average(operationData)
-	case operation == "SUM":
-		return sum(operationData)
-	case operation == "MED":
-		return median(operationData)
-	default:
-		return 0
+	operationsMap := map[string]func([]float64) float64{
+		"AVG": average,
+		"SUM": sum,
+		"MED": median,
 	}
+
+	if operationFunc, exists := operationsMap[operation]; exists {
+		return operationFunc(operationData)
+	}
+	return 0
 }
 
 func calculation() {
@@ -120,7 +120,7 @@ func calculation() {
 		fmt.Println("Продолжим расчеты? (y/n): ")
 		fmt.Scan(&isOn)
 
-		if isOn == "n" || isOn == "N" {
+		if isOn != "y" || isOn == "Y" {
 			break
 		}
 	}
