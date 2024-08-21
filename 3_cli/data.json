@@ -1,0 +1,19 @@
+{
+	"accounts": [
+		{
+			"login": "b@b.com",
+			"password": "121sdawd231",
+			"url": "http://assap.ru",
+			"createdAt": "2024-07-15T12:46:49.200894+03:00",
+			"updatedAt": "2024-07-15T12:46:49.200895+03:00"
+		},
+		{
+			"login": "c@c.com",
+			"password": "wajn!@jnwdai",
+			"url": "https://bassap.ru",
+			"createdAt": "2024-07-21T18:02:15.897296+03:00",
+			"updatedAt": "2024-07-21T18:02:15.897296+03:00"
+		}
+	],
+	"updatedAt": "2024-07-22T20:00:19.623073+03:00"
+}
