@@ -39,5 +39,7 @@ func main() {
 
 	wg.Wait()
 
-	fmt.Println(<-resCh)
+	for _, num := range <-resCh {
+		fmt.Printf("%d ", num)
+	}
 }
