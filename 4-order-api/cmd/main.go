@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"go/order-api/configs"
-	"go/order-api/internal/auth"
-	"go/order-api/internal/product"
 	"go/order-api/pkg/db"
 	"go/order-api/pkg/middleware"
 	"net/http"
@@ -14,15 +12,14 @@ func main() {
 	conf := configs.LoadConfig()
 	db := db.NewDB(conf)
 	router := http.NewServeMux()
+	repositories := InitRepositories(db)
+	services := InitServices(repositories)
 
-	productRepository := product.NewProductRepository(db)
-
-	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
-		Config: conf,
-	})
-
-	product.NewProductHandler(router, product.ProoductHandlerDeps{
-		ProductRepository: productRepository,
+	InitHandlers(&HandlersConfig{
+		conf:         conf,
+		services:     services,
+		repositories: repositories,
+		router:       router,
 	})
 
 	middlewaresStack := middleware.Chain(

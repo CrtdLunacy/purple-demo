@@ -1,23 +1,19 @@
 package auth
 
-type BaseFields struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+type AuthRequest struct {
+	Phone string `json:"phone" validate:"required,e164"`
 }
 
-type LoginRequest struct {
-	BaseFields
+type AuthResponse struct {
+	SessionId string `json:"session_id"`
+	Code      int    `json:"code"`
 }
 
-type LoginResponse struct {
+type VerifyRequest struct {
+	SessionId string `json:"session_id" validate:"required"`
+	Code      int    `json:"code" validate:"required"`
+}
+
+type VerifyResponse struct {
 	Token string `json:"token"`
-}
-
-type RegisterRequest struct {
-	BaseFields
-	Name string `json:"name" validate:"required,max=20"`
-}
-
-type RegisterResponse struct {
-	RegisterMsg string `json:"register_msg"`
 }
