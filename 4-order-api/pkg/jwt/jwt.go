@@ -34,3 +34,19 @@ func (j *JWT) Create(tokenData *TokenData) (string, error) {
 
 	return s, nil
 }
+
+func (j *JWT) Parse(token string) (bool, *TokenData) {
+	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		return []byte(j.Secret), nil
+	})
+	if err != nil {
+		return false, nil
+	}
+
+	tokenData := t.Claims.(jwt.MapClaims)
+
+	return t.Valid, &TokenData{
+		Phone:     tokenData["phone"].(string),
+		SessionId: tokenData["session_id"].(string),
+	}
+}

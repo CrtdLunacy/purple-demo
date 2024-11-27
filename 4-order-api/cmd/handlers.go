@@ -26,6 +26,7 @@ func InitHandlers(handlerConf *HandlersConfig) {
 	})
 
 	product.NewProductHandler(handlerConf.router, product.ProoductHandlerDeps{
+		Config:            handlerConf.conf,
 		ProductRepository: handlerConf.repositories.ProductRepository,
 	})
 }
