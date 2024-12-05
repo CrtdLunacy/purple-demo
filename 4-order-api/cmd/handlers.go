@@ -3,6 +3,7 @@ package main
 import (
 	"go/order-api/configs"
 	"go/order-api/internal/auth"
+	"go/order-api/internal/order"
 	"go/order-api/internal/product"
 	"net/http"
 )
@@ -28,5 +29,11 @@ func InitHandlers(handlerConf *HandlersConfig) {
 	product.NewProductHandler(handlerConf.router, product.ProoductHandlerDeps{
 		Config:            handlerConf.conf,
 		ProductRepository: handlerConf.repositories.ProductRepository,
+	})
+
+	order.NewOrderHandler(handlerConf.router, order.OrderHandlerDeps{
+		Config:          handlerConf.conf,
+		OrderRepository: handlerConf.repositories.OrderRepository,
+		OrderService:    handlerConf.services.OrderService,
 	})
 }

@@ -64,7 +64,7 @@ func (authHandler *AuthHandler) Verify() http.HandlerFunc {
 			Code:      body.Code,
 		})
 		if err != nil {
-			response.ResponseJSON(w, err.Error(), http.StatusInternalServerError)
+			response.ResponseJSON(w, ErrSessionExpired, http.StatusInternalServerError)
 			return
 		}
 

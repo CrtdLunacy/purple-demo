@@ -9,10 +9,13 @@ import (
 )
 
 type key string
+type AuthContext struct {
+	SessionId string
+	Phone     string
+}
 
 const (
-	CtxPhoneKey   key = "CtxPhoneKey"
-	CtxSessionKey key = "CtxSessionKey"
+	CtxAuthData key = "authData"
 )
 
 func writeUnauthorized(w http.ResponseWriter) {
@@ -42,8 +45,12 @@ func AuthCheck(next http.Handler, config *configs.Config) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), CtxPhoneKey, data.Phone)
-		ctx = context.WithValue(r.Context(), CtxSessionKey, data.SessionId)
+		authCtx := AuthContext{
+			SessionId: data.SessionId,
+			Phone:     data.Phone,
+		}
+
+		ctx := context.WithValue(r.Context(), "authData", authCtx)
 		req := r.WithContext(ctx)
 
 		next.ServeHTTP(w, req)
