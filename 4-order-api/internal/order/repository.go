@@ -23,10 +23,10 @@ func (repo *OrderRepository) Create(order *Order) (*Order, error) {
 	return order, nil
 }
 
-func (repo *OrderRepository) GetByID(userPhone string, orderID uint) (*Order, error) {
+func (repo *OrderRepository) GetByID(userId uint, orderID uint) (*Order, error) {
 	var order Order
 
-	result := repo.Database.DB.Preload("Products").Where("user_phone = ?", userPhone).First(&order, orderID)
+	result := repo.Database.DB.Preload("Products").Where("user_id = ?", userId).First(&order, orderID)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -34,10 +34,10 @@ func (repo *OrderRepository) GetByID(userPhone string, orderID uint) (*Order, er
 	return &order, nil
 }
 
-func (repo *OrderRepository) GetAll(userPhone string) ([]Order, error) {
+func (repo *OrderRepository) GetAll(userId uint) ([]Order, error) {
 	var orders []Order
 
-	result := repo.Database.DB.Preload("Products").Where("user_phone = ?", userPhone).Find(&orders)
+	result := repo.Database.DB.Preload("Products").Where("user_id = ?", userId).Find(&orders)
 	if result.Error != nil {
 		return nil, result.Error
 	}

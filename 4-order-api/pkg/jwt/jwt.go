@@ -14,6 +14,7 @@ type TokenData struct {
 	Phone     string
 	SessionId string
 	Code      int
+	UserId    float64
 }
 
 func NewJWT(secret string) *JWT {
@@ -25,6 +26,7 @@ func (j *JWT) Create(tokenData *TokenData) (string, error) {
 		"phone":      tokenData.Phone,
 		"session_id": tokenData.SessionId,
 		"code":       tokenData.Code,
+		"user_id":    tokenData.UserId,
 		"exp":        time.Now().Add(time.Hour * 72).Unix(),
 	})
 	s, err := token.SignedString([]byte(j.Secret))
@@ -48,5 +50,6 @@ func (j *JWT) Parse(token string) (bool, *TokenData) {
 	return t.Valid, &TokenData{
 		Phone:     tokenData["phone"].(string),
 		SessionId: tokenData["session_id"].(string),
+		UserId:    tokenData["user_id"].(float64),
 	}
 }

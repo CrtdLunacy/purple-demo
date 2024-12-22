@@ -9,16 +9,18 @@ import (
 
 type Order struct {
 	gorm.Model
-	UserPhone string            `json:"user_phone"`                                // Ссылка на ID пользователя
-	User      user.User         `json:"-" gorm:"foreignKey:UserPhone"`             // Поле для передачи ID продуктов, не сохраняется в БД         // Связь с моделью User
-	Products  []product.Product `json:"products" gorm:"many2many:order_products;"` // Связь many-to-many с продуктами
+	UserID    uint              `json:"-"`
+	UserPhone string            `json:"phone"`
+	User      user.User         `json:"-" gorm:"foreignKey:UserID"`
+	Products  []product.Product `json:"products" gorm:"many2many:order_products;constraint:onDelete:CASCADE"`
 	Price     float64           `json:"price"`
 }
 
 func NewOrder(order Order) *Order {
 	return &Order{
-		UserPhone: order.UserPhone,
+		UserID:    order.UserID,
 		Products:  order.Products,
 		Price:     order.Price,
+		UserPhone: order.UserPhone,
 	}
 }

@@ -9,9 +9,10 @@ type OrderService struct {
 }
 
 type OrderData struct {
-	Phone      string
+	UserId     uint
 	Products   []uint
 	TotalPrice float64
+	UserPhone  string
 }
 
 func NewOrderService(orderRepository *OrderRepository) *OrderService {
@@ -35,11 +36,13 @@ func (service *OrderService) CreateOrder(data *OrderData) (*Order, error) {
 		return nil, err
 	}
 
-	newOrder := &Order{
-		UserPhone: data.Phone,
-		Products:  products,
-		Price:     data.TotalPrice,
-	}
+	newOrder := NewOrder(
+		Order{
+			UserID:    data.UserId,
+			Products:  products,
+			Price:     data.TotalPrice,
+			UserPhone: data.UserPhone,
+		})
 
 	createdOrder, err := service.OrderRepository.Create(newOrder)
 	if err != nil {

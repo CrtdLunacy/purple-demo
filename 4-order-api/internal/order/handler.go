@@ -1,6 +1,7 @@
 package order
 
 import (
+	"fmt"
 	"go/order-api/configs"
 	"go/order-api/pkg/middleware"
 	"go/order-api/pkg/request"
@@ -46,10 +47,12 @@ func (orderHandler *OrderHandler) Create() http.HandlerFunc {
 			return
 		}
 
+		fmt.Println(authCtx)
 		order, err := orderHandler.OrderService.CreateOrder(&OrderData{
-			Phone:      authCtx.Phone,
+			UserId:     authCtx.UserID,
 			Products:   body.Products,
 			TotalPrice: body.TotalPrice,
+			UserPhone:  authCtx.Phone,
 		})
 		if err != nil {
 			response.ResponseJSON(w, ErrOrderCreate, http.StatusBadRequest)
@@ -69,7 +72,7 @@ func (orderHandler *OrderHandler) GetAll() http.HandlerFunc {
 			return
 		}
 
-		userOrders, err := orderHandler.OrderRepository.GetAll(authCtx.Phone)
+		userOrders, err := orderHandler.OrderRepository.GetAll(authCtx.UserID)
 		if err != nil {
 			response.ResponseJSON(w, err.Error(), http.StatusBadRequest)
 			return
@@ -94,7 +97,7 @@ func (orderHandler *OrderHandler) GetById() http.HandlerFunc {
 			return
 		}
 
-		userOrder, err := orderHandler.OrderRepository.GetByID(authCtx.Phone, uint(id))
+		userOrder, err := orderHandler.OrderRepository.GetByID(authCtx.UserID, uint(id))
 		if err != nil {
 			response.ResponseJSON(w, err.Error(), http.StatusBadRequest)
 			return

@@ -12,6 +12,7 @@ type key string
 type AuthContext struct {
 	SessionId string
 	Phone     string
+	UserID    uint
 }
 
 const (
@@ -48,6 +49,7 @@ func AuthCheck(next http.Handler, config *configs.Config) http.Handler {
 		authCtx := AuthContext{
 			SessionId: data.SessionId,
 			Phone:     data.Phone,
+			UserID:    uint(data.UserId),
 		}
 
 		ctx := context.WithValue(r.Context(), "authData", authCtx)

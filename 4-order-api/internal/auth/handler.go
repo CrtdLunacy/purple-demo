@@ -72,6 +72,7 @@ func (authHandler *AuthHandler) Verify() http.HandlerFunc {
 			Phone:     user.Phone,
 			SessionId: user.SessionId,
 			Code:      user.Code,
+			UserId:    float64(user.ID),
 		})
 
 		if err != nil {
